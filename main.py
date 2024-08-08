@@ -14,3 +14,11 @@ courses= {
         'hours': 15
     }
 }
+
+@app.get('/courses')
+async def get_courses():
+    return courses
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host= '0.0.0.0', port = 8000)
