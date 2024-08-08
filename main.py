@@ -1,5 +1,7 @@
+from typing import Optional, List
 from fastapi import FastAPI
 from fastapi import HTTPException, status
+from models import Course
 
 app = FastAPI()
 
@@ -29,6 +31,15 @@ async def get_course(course_id:int):
 
     except KeyError:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail = 'course not found')
+
+@app.post('/courses', status_code= status.HTTP_201_CREATED)
+async def post_course(course:Course):
+    next_id = len(courses) + 1
+    if course.id not in courses:
+        courses[next_id] = course
+        return course
+    else:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail= f'A course with that id; {Course.id} already exists ')
 
 if __name__ == "__main__":
     import uvicorn
