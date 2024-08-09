@@ -41,6 +41,18 @@ async def post_course(course:Course):
     else:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail= f'A course with that id; {Course.id} already exists ')
 
+@app.put('/courses/{course_id}')
+async def put_course(course_id:int,course:Course):
+    if course_id in courses:
+        courses[course_id] = course
+    else:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND)
+
+
+       
+
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host= '0.0.0.0', port = 8000, reload= True)
