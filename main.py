@@ -2,6 +2,7 @@ from typing import Optional, List
 from fastapi import FastAPI
 from fastapi import HTTPException, status
 from models import Course
+from fastapi.responses import Response
 
 app = FastAPI()
 
@@ -45,9 +46,17 @@ async def post_course(course:Course):
 async def put_course(course_id:int,course:Course):
     if course_id in courses:
         courses[course_id] = course
+        course.id = course_id
     else:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND)
 
+@app.delete('/courses/{course_id}')
+async def delete_course(course_id:int):
+    if course_id in courses:
+        del courses[course_id]
+        return Response(status_code= status.HTTP_204_NO_CONTENT)
+    else:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUND)
 
        
 
